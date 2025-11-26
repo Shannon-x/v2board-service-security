@@ -46,6 +46,7 @@
        - MAIL_PORT=${MAIL_PORT} # SMTP 邮件服务器端口
        - MAIL_SECURE=${MAIL_SECURE} # 是否使用安全连接
        - MAIL_USER=${MAIL_USER} # SMTP 邮件服务器用户名
+       - MAIL_FROM=${MAIL_FROM} # SMTP 发信邮箱（可选，默认为 MAIL_USER）
        - MAIL_PASS=${MAIL_PASS} # SMTP 邮件服务器密码
        - MAIL_NEWUSER_SUBJECT=${MAIL_NEWUSER_SUBJECT} # 新用户注册邮件主题
        - MAIL_NEWUSER_URL=${MAIL_NEWUSER_URL} # 新用户注册邮件模板链接，用于向新用户发送注册成功和账号密码的通知，需自行创建一个邮件模板文件，并将其放置在 cdn 上，作为链接，设置到 `MAIL_NEWUSER_URL` 环境变量中，如果不设置，将默认采用纯文本模板

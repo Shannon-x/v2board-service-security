@@ -98,7 +98,7 @@ app.use(async (ctx, next) => {
       const bodyData = ctx.request.body as { captcha?: CaptchaCheckOptions }
       const checkCaptchaData = checkCaptcha(captchaPathData.type, bodyData.captcha)
       if (checkCaptchaData !== true) {
-        ctx.response.status = 500
+        ctx.response.status = 400
         ctx.response.body = {
           code: checkCaptchaData.code,
           message: checkCaptchaData.message,

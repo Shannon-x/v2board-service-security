@@ -16,6 +16,7 @@ export const smtpHost = process.env.MAIL_HOST
 export const smtpPort = process.env.MAIL_PORT
 export const smtpSecure = process.env.MAIL_SECURE === 'true'
 export const smtpUser = process.env.MAIL_USER
+export const smtpFrom = process.env.MAIL_FROM || smtpUser
 export const smtpPassword = process.env.MAIL_PASS
 export const smtpNewUserSubject = process.env.MAIL_NEWUSER_SUBJECT
 export const smtpNewUserTemplate = process.env.MAIL_NEWUSER_URL

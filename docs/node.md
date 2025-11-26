@@ -45,6 +45,7 @@ export MAIL_HOST=smtp.gmail.com # SMTP 邮件服务器地址
 export MAIL_PORT=465
 export MAIL_SECURE=true
 export MAIL_USER=xxx@gmail.com # SMTP 邮件服务器用户名
+export MAIL_FROM=xxx@gmail.com # SMTP 发信邮箱（可选，默认为 MAIL_USER）
 export MAIL_PASS=xxx # SMTP 邮件服务器密码
 export MAIL_NEWUSER_SUBJECT='欢迎加入 AirBuddy' # 新用户注册邮件主题
 export MAIL_NEWUSER_URL=https://xxx.com/xxx.html # 新用户注册邮件模板 URL

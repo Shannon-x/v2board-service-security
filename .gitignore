@@ -15,9 +15,15 @@ logs
 .idea
 
 # Local env files
+.env
 .env.local
 .env.*.local
 !.env.example
+
+# Local docker compose files
+docker-compose.yml
+docker-compose.yaml
+docker-compose.*.yml
 
 .yarn
 

@@ -168,7 +168,8 @@ router.get('/api/v1/r8d/quick/captcha', async (ctx: Koa.Context) => {
  * 创建免登订单
  */
 router.post('/api/v1/r8d/quick/order', async (ctx: Koa.Context) => {
-  const { email, password, planId, period, couponCode, inviteCode } = ctx.request.body as {
+  try {
+    const { email, password, planId, period, couponCode, inviteCode } = ctx.request.body as {
     planId: string
     period: PlanPeriodKey
     email: string
@@ -189,9 +190,9 @@ router.post('/api/v1/r8d/quick/order', async (ctx: Koa.Context) => {
       // @ts-expect-error
       const text = couponData.message || '优惠券无效'
       console.error('优惠券验证错误信息:', text)
-      ctx.response.status = 500
+      ctx.response.status = 400
       ctx.response.body = {
-        code: 500,
+        code: 400,
         message: text,
       }
       return
@@ -202,9 +203,9 @@ router.post('/api/v1/r8d/quick/order', async (ctx: Koa.Context) => {
   const checkUserExist = await BackendService.instance.checkUser(email)
   if (checkUserExist) {
     console.error('用户已存在:', email)
-    ctx.response.status = 500
+    ctx.response.status = 400
     ctx.response.body = {
-      code: 500,
+      code: 400,
       message: '用户已存在',
     }
     return
@@ -244,6 +245,14 @@ router.post('/api/v1/r8d/quick/order', async (ctx: Koa.Context) => {
     authToken,
     orderId: order,
   }
+  } catch (e: any) {
+    console.error('createOrder Error:', e)
+    ctx.response.status = 500
+    ctx.response.body = {
+      code: 500,
+      message: e.message || '创建订单失败',
+    }
+  }
 })
 
 // proxy
@@ -264,13 +273,17 @@ router.all('/api/v1/:segments*', async (ctx: Koa.Context) => {
   const { query, path, body, rawBody } = ctx.request
   query && (url.search = new URLSearchParams(query as Record<string, string | readonly string[]>).toString())
   url.pathname = path
-  console.log('代理转发请求:', `${ctx.method} ${url.toString()}`, 'path:', path, 'body:', body, 'rawBody:', rawBody)
+  console.log('代理转发请求:', `${ctx.method} ${url.toString()}`, 'path:', path, 'body:', body, 'rawBody:', rawBody, 'authorization:', ctx.request.headers['authorization'])
 
   // 代理请求转发
+  if (body && Object.keys(body).length > 0) {
+    headers.set('content-type', 'application/json')
+  }
+
   const response = await fetch(url, {
     method: ctx.method,
     headers,
-    body: JSON.stringify(body),
+    body: body ? JSON.stringify(body) : undefined,
     verbose: false, // 调试用，输出详细日志
     ...proxyConfig,
   })

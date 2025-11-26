@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import nodemailer from 'nodemailer'
-import { proxyConfig, smtpHost, smtpNewUserTemplate, smtpPassword, smtpPort, smtpSecure, smtpUser } from '../env'
+import { proxyConfig, smtpFrom, smtpHost, smtpNewUserTemplate, smtpPassword, smtpPort, smtpSecure, smtpUser } from '../env'
 
 export class MailerService {
   static _instance: MailerService
@@ -15,6 +15,7 @@ export class MailerService {
   host?: string
   port?: number
   secure?: boolean // Use `true` for port 465, `false` for all other ports
+  from?: string
   auth?: {
     user: string
     pass: string
@@ -31,6 +32,7 @@ export class MailerService {
     this.host = smtpHost
     this.port = Number(smtpPort) || 465
     this.secure = smtpSecure
+    this.from = smtpFrom
     this.auth = {
       user: smtpUser,
       pass: smtpPassword,
@@ -41,7 +43,7 @@ export class MailerService {
       secure: this.secure,
       auth: this.auth,
     })
-    console.log('Mailer 初始化配置:', this.host, this.port, this.auth.user)
+    console.log('Mailer 初始化配置:', this.host, this.port, this.auth.user, this.from)
   }
 
   async init() {
@@ -82,7 +84,7 @@ export class MailerService {
     await this.transport.sendMail({
       subject,
       ...content,
-      from: this.auth.user,
+      from: this.from,
       to: email,
     })
   }

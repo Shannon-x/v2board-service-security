@@ -172,8 +172,8 @@ export class BackendService {
   }
 
   async createUser({ email, password, invite_code }: { email: string, password: string, invite_code?: string }) {
-    // const url = this.passportApi('auth/register')
-    const url = `${this.origin}/api/v1/passport/auth/register`
+    // 根据面板类型选择正确的 API 版本
+    const url = `${this.origin}/api/${this.panel === 'xb' ? 'v2' : 'v1'}/passport/auth/register`
     const method = 'POST'
 
     const user = await this.request<{
@@ -218,7 +218,7 @@ export class BackendService {
     }
 
     // 使用普通登录接口获取用户的 token
-    const loginUrl = `${this.origin}/api/v1/passport/auth/login`
+    const loginUrl = `${this.origin}/api/${this.panel === 'xb' ? 'v2' : 'v1'}/passport/auth/login`
     const user = await this.request<{
       data: {
         token: string
